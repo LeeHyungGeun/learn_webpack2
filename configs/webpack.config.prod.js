@@ -29,6 +29,11 @@ module.exports = {
         ]
     },
     plugins: [
-
-    ]
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true
+        })
+    ],
+    devtool: 'nosources-source-map',
+    target: 'web',
+    debug: false
 };
