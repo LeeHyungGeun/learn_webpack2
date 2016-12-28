@@ -10,10 +10,19 @@ var port = 8080;
 var config;
 
 
-gulp.task('prod', function() {
-    return gulp.src([''])
-        .pipe(gwebpack(prodWebpackConfig), webpack)
-        .pipe(gulp.dest('./dist/js/'));
+gulp.task('prod', function(callback) {
+    // return gulp.src([''])
+    //     .pipe(gwebpack(prodWebpackConfig), webpack)
+    //     .pipe(gulp.dest('./dist/js/'));
+    webpack(prodWebpackConfig, function(err, stats) {
+        if (err) {
+            throw new $.util.PluginError('webpack', err);
+            $.util.log('[webpack]', stats.toString({
+                // output options
+            }));
+            callback();
+        }
+    });
 });
 
 gulp.task('dev', function() {
