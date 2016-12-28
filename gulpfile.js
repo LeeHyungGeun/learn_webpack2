@@ -1,6 +1,5 @@
 const gulp = require('gulp');
 const webpack = require('webpack');
-const gwebpack = require('gulp-webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const path = require('path');
 const $ = require('gulp-load-plugins');
@@ -9,11 +8,7 @@ var prodWebpackConfig = require('./configs/webpack.config.prod.js');
 var port = 8080;
 var config;
 
-
 gulp.task('prod', function(callback) {
-    // return gulp.src([''])
-    //     .pipe(gwebpack(prodWebpackConfig), webpack)
-    //     .pipe(gulp.dest('./dist/js/'));
     webpack(prodWebpackConfig, function(err, stats) {
         if (err) {
             throw new $.util.PluginError('webpack', err);
@@ -27,6 +22,7 @@ gulp.task('prod', function(callback) {
 
 gulp.task('dev', function() {
     new WebpackDevServer(webpack(devWebpackConfig), {
+        // Dev Server Options
         hot: true,
         compress: true,
         inline: true,
