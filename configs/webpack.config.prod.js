@@ -34,6 +34,5 @@ module.exports = {
         })
     ],
     devtool: 'nosources-source-map',
-    target: 'web',
-    debug: false
+    target: 'web'
 };
