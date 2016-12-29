@@ -1,14 +1,22 @@
 const gulp = require('gulp');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const path = require('path');
-const $ = require('gulp-load-plugins');
 var devWebpackConfig = require('./configs/webpack.config.dev.js');
 var prodWebpackConfig = require('./configs/webpack.config.prod.js');
-var port = 8080;
+
+const browserSync = require('browser-sync');
+var bsConfig = require('./configs/bs.config.js');
+
+const path = require('path');
+const $ = require('gulp-load-plugins');
+var port = 9090;
 var config;
 
-gulp.task('prod', function(callback) {
+gulp.task('prod', prod);
+gulp.task('dev', dev);
+gulp.task('default', dev);
+
+function prod(callback) {
     webpack(prodWebpackConfig, function(err, stats) {
         if (err) {
             throw new $.util.PluginError('webpack', err);
@@ -18,21 +26,32 @@ gulp.task('prod', function(callback) {
             callback();
         }
     });
-});
+}
 
-gulp.task('dev', function() {
+function dev() {
     new WebpackDevServer(webpack(devWebpackConfig), {
         // Dev Server Options
         hot: true,
         compress: true,
         inline: true,
         contentBase: __dirname,
-        publicPath: '/dist/js/'
+        publicPath: '/dist/js/',
+        proxy: [{
+            path: ['/rest/**'],
+            target: 'localhost/'
+        }]
     })
     .listen(port, 'localhost', function(err) {
         if (err) {
             throw new $.util.PluginError('webpack-dev-server', err);
             $.util.log('[webpack-dev-server]', 'http://localhost:' + port + '/webpack-dev-server/index.html');
         }
+        else {
+            bsServer();
+        }
     });
-});
+}
+
+function bsServer() {
+    browserSync(bsConfig);
+}
